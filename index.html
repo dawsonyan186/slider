@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title></title>
+</head>
+<style type="text/css">
+.images {
+    display: flex;
+    align-items: start;
+    border: 1px solid red;
+    transition: transform 0.5s;
+}
+.window {
+    width: 300px;
+    overflow: hidden;
+}
+.images>img {
+    transition: transform 0.5s;
+}
+.images-position-1 {
+    transform: translateX(0);
+}
+.images-position-2 {
+    transform: translateX(-300px);
+}
+.images-position-3 {
+    transform: translateX(-600px);
+}
+.red {
+    color: red;
+}
+</style>
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<body>
+    <div class="window">
+        <div class="images" id="images">
+            <img src="https://metrouk2.files.wordpress.com/2017/10/83454906.jpg?w=620&h=412&crop=1" width=300px>
+            <img src="https://www.thenakedscientists.com/sites/default/files/styles/featured_image/public/media/media/xdog-1210559_960_720.jpg,qitok=IZQtHV4n.pagespeed.ic.BadqxO-3n1.jpg" width=300px>
+            <img src="https://images.hellogiggles.com/uploads/2016/07/27033400/teacup-700x525.jpg" width=300px>
+        </div>
+        <div id="buttons">
+            <button id="p1">第1张</button>
+            <button id="p2">第2张</button>
+            <button id="p3">第3张</button>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+var allButtons = $('#buttons > button');
+for (var i = 0; i < allButtons.length; i++) {
+    $(allButtons[i]).on('click', function(e) {
+        var index = $(e.currentTarget).index();
+        var length = index * (-300);
+        $('#images').css({
+            transform: 'translate(' + length + 'px)'
+        });
+        activeButton(allButtons.eq(index));
+    });
+}
+
+var timer;
+var n = 0;
+var count = allButtons.length;
+activeButton(allButtons.eq(n % count));
+
+playSlider(n % count);
+
+function playSlider(index) {
+    console.log(index)
+    var $button = allButtons.eq(index);
+    $button.trigger('click');
+    activeButton($button);
+}
+
+function activeButton($button) {
+    $button.addClass('red').siblings('.red').removeClass('red');
+}
+
+function setTimer() {
+    timer = setInterval(function() {
+        console.log(n % count);
+        playSlider(n % count);
+        n++;
+    }, 1000);
+}
+setTimer();
+
+$('.window').on('mouseenter', function() {
+    window.clearInterval(timer);
+});
+
+$('.window').on('mouseleave', function() {
+    setTimer();
+});
+</script>
+</html>
